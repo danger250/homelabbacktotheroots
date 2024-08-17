@@ -39,6 +39,7 @@ home-assistant:
     config:
       enabled: true
       size: 2Gi
+      storageClass: rook-ceph-block
     configfile:
       enabled: true
       name: home-assistant-configfile
@@ -60,10 +61,6 @@ home-assistant:
           frontend:
             themes: !include_dir_merge_named themes
 
-          automation: !include automations.yaml
-          script: !include scripts.yaml
-          scene: !include scenes.yaml
-          light: !include lights.yaml
           http:
             server_host: 0.0.0.0
             ip_ban_enabled: true
@@ -72,23 +69,6 @@ home-assistant:
             trusted_proxies:
               - 10.42.0.0/16
               - 192.168.1.0/24
-          feedreader:
-            urls:
-              - https://www.srf.ch/news/bnf/rss/1890
-              - https://www.stadtluzern.ch/aktuelles/news.rss
-              - https://www.srf.ch/sport/bnf/rss/2562
-            scan_interval:
-              minutes: 1
-            max_entries: 5
-          sensor:
-            - platform: swiss_public_transport
-              from: 8589846
-              to: 8508450
-            - platform: swiss_public_transport_mod
-              name: Weinbergli
-              limit: 4
-              stationboard:
-                - Luzern, Weinbergli
   addons:
     codeserver:
       enabled: true

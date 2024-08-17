@@ -1,0 +1,28 @@
+﻿apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  grocy
+  namespace: grocy
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/target: "homelab-tunnel.danger250.com"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    hajimari.io/appName: grocy
+    hajimari.io/icon: multimedia
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - grocy.danger250.com
+      secretName: grocy-danger250-tls-certificate
+  rules:
+    - host: grocy.danger250.com
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: grocy
+                port:
+                  number: 8080

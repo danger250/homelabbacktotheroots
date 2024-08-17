@@ -1,4 +1,6 @@
 home-assistant:
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
   ingress:
     main:
       enabled: true
@@ -8,6 +10,8 @@ home-assistant:
         hajimari.io/appName: Home-Assistant
         hajimari.io/icon: google-drive
         nginx.org/websocket-services: home-assistant
+        external-dns.alpha.kubernetes.io/target: "homelab-tunnel.danger250.com"
+        external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
       hosts:
         - host: &host home-assistant.danger250.com
           paths:
@@ -17,9 +21,82 @@ home-assistant:
         - secretName: home-assistant-tls-certificate
           hosts:
             - *host
-  postgresql:
-    enabled: true
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - "/bin/sh"
+          - "-c"
+          - cp -f configuration.yaml_new configuration.yaml;
+            wget -O - https://get.hacs.xyz | bash -;
+            if [ ! -d ./media ]; then
+            mkdir media;
+            fi;
+            if [ ! -d ./www ]; then
+            mkdir www;
+            fi;
   persistence:
     config:
       enabled: true
       size: 2Gi
+    configfile:
+      enabled: true
+      name: home-assistant-configfile
+      items:
+        - key: configuration
+          path: configuration.yaml_new
+      type: configMap
+      mountPath:  /config/configuration.yaml_new
+      subPath: configuration.yaml_new
+  configmap:
+    configfile:
+      enabled: true
+      data:
+        configuration: |
+          # Loads default set of integrations. Do not remove.
+          default_config:
+
+          # Load frontend themes from the themes folder
+          frontend:
+            themes: !include_dir_merge_named themes
+
+          automation: !include automations.yaml
+          script: !include scripts.yaml
+          scene: !include scenes.yaml
+          light: !include lights.yaml
+          http:
+            server_host: 0.0.0.0
+            ip_ban_enabled: true
+            login_attempts_threshold: 5
+            use_x_forwarded_for: true
+            trusted_proxies:
+              - 10.42.0.0/16
+              - 192.168.1.0/24
+          feedreader:
+            urls:
+              - https://www.srf.ch/news/bnf/rss/1890
+              - https://www.stadtluzern.ch/aktuelles/news.rss
+              - https://www.srf.ch/sport/bnf/rss/2562
+            scan_interval:
+              minutes: 1
+            max_entries: 5
+          sensor:
+            - platform: swiss_public_transport
+              from: 8589846
+              to: 8508450
+            - platform: swiss_public_transport_mod
+              name: Weinbergli
+              limit: 4
+              stationboard:
+                - Luzern, Weinbergli
+  addons:
+    codeserver:
+      enabled: true
+      args:
+        - --auth
+        - none
+        - --user-data-dir
+        - /data/config/.vscode
+      volumeMounts:
+        - name: config
+          mountPath: /data/config

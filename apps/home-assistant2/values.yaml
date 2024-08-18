@@ -51,9 +51,6 @@ home-assistant:
       script: !include scripts.yaml
       scene: !include scenes.yaml
       sensor:
-         - platform: swiss_public_transport
-           from: 8589846
-           to: 8508450
          - platform: swiss_public_transport_mod
            name: Weinbergli
            limit: 4

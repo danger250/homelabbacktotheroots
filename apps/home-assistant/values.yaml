@@ -10,12 +10,12 @@ home-assistant:
       hajimari.io/icon: google-drive
       nginx.org/websocket-services: home-assistant
     hosts:
-      - host: &host home-assistant-new.danger250.com
+      - host: &host home-assistant.danger250.com
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls:
-      - secretName: home-assistant-new-tls-certificate
+      - secretName: home-assistant-tls-certificate
         hosts:
           - *host
   persistence:

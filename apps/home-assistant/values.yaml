@@ -9,6 +9,8 @@ home-assistant:
       hajimari.io/appName: Home-Assistant
       hajimari.io/icon: google-drive
       nginx.org/websocket-services: home-assistant
+      external-dns.alpha.kubernetes.io/target: "homelab-tunnel.danger250.com"
+      external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
     hosts:
       - host: &host home-assistant.danger250.com
         paths:
@@ -48,6 +50,15 @@ home-assistant:
       automation: !include automations.yaml
       script: !include scripts.yaml
       scene: !include scenes.yaml
+      sensor:
+         - platform: swiss_public_transport
+           from: 8589846
+           to: 8508450
+         - platform: swiss_public_transport_mod
+           name: Weinbergli
+           limit: 4
+           stationboard:
+             - Luzern, Weinbergli
     initScript: |-
       #!/bin/bash
       set -e

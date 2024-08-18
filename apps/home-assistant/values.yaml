@@ -58,8 +58,8 @@ home-assistant:
 
           http:
             server_host: 0.0.0.0
-            ip_ban_enabled: true
-            login_attempts_threshold: 5
+            ip_ban_enabled: false
+            login_attempts_threshold: 20
             use_x_forwarded_for: true
             trusted_proxies:
               - 10.42.0.0/16

@@ -6,7 +6,7 @@ home-assistant:
     className: nginx
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      hajimari.io/appName: Home-Assistant-New
+      hajimari.io/appName: Home-Assistant
       hajimari.io/icon: google-drive
       nginx.org/websocket-services: home-assistant
     hosts:

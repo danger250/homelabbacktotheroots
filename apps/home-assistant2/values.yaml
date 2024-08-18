@@ -17,7 +17,7 @@ home-assistant:
           - path: /
             pathType: ImplementationSpecific
     tls:
-      - secretName: home-assistant-tls-certificate
+      - secretName: home-assistant-new-tls-certificate
         hosts:
           - *host
   persistence:

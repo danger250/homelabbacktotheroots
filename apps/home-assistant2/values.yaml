@@ -56,13 +56,13 @@ home-assistant:
            stationboard:
              - Luzern, Weinbergli
       notify:
-      - name: WhatsApp A
-        platform: rest
-        resource: https://api.callmebot.com/whatsapp.php
-        data:
-          source: HA
-          phone: +41798647346   # <- Gebe hier deine Telefonnummer ein, im Format +491501234567890 (+49 ist die Ländervorwahl und ersetzt die 0 bei deutschen Telefonnummern)
-          apikey: 7780792   # <- Gebe hier deinen API-Key von CallmeBot ein, im Format 123456
+        - name: WhatsApp A
+          platform: rest
+          resource: https://api.callmebot.com/whatsapp.php
+          data:
+            source: HA
+            phone: +41798647346   # <- Gebe hier deine Telefonnummer ein, im Format +491501234567890 (+49 ist die Ländervorwahl und ersetzt die 0 bei deutschen Telefonnummern)
+            apikey: 7780792   # <- Gebe hier deinen API-Key von CallmeBot ein, im Format 123456
       automation:
         - alias: "Benachrichtigung bei überfälliger Grocy-Aufgabe"
           trigger:
